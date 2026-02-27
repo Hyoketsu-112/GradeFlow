@@ -1,0 +1,18 @@
+body {
+  font-family: "Inter", sans-serif;
+}
+[contenteditable="true"]:focus {
+  outline: 2px solid #4f46e5;
+  background-color: #f0f9ff;
+  border-radius: 4px;
+}
+.calculated-field {
+  background-color: #f3f4f6;
+  font-weight: 500;
+}
+.sticky-header th {
+  position: sticky;
+  top: 0;
+  background: #f9fafb;
+  z-index: 10;
+}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GradeFlow – Class Grade Manager</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS (XLSX) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-[#F9FAFB] text-[#1F2937]">
+    <div id="app" class="container mx-auto p-6">
+      <h1 class="text-4xl font-semibold text-[#4F46E5] mb-2">GradeFlow</h1>
+      <p class="text-[#6B7280] mb-6">
+        Upload an Excel file to manage and calculate student grades.
+      </p>
+
+      <!-- Upload Area -->
+      <div
+        class="bg-white rounded-xl shadow-md p-8 mb-8 text-center border-2 border-dashed border-[#4F46E5]"
+      >
+        <input
+          type="file"
+          id="fileInput"
+          accept=".xlsx, .xls, .csv"
+          class="hidden"
+        />
+        <button
+          id="uploadBtn"
+          class="bg-[#4F46E5] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#4338CA] transition"
+        >
+          Choose Excel File
+        </button>
+        <p class="text-sm text-[#6B7280] mt-4">Supports .xlsx, .xls, .csv</p>
+      </div>
+
+      <!-- Spinner (hidden by default) -->
+      <div id="spinner" class="hidden flex justify-center my-4">
+        <div
+          class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F46E5]"
+        ></div>
+      </div>
+
+      <!-- Preview Sections (hidden initially) -->
+      <div id="preview" class="hidden space-y-8">
+        <!-- Auto-filled Metadata (now with Class) -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <h2 class="text-xl font-semibold mb-4 text-[#4F46E5]">
+            📋 Class Details
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <span class="font-medium">School:</span>
+              <span id="schoolName">-</span>
+            </div>
+            <div>
+              <span class="font-medium">Class:</span>
+              <span id="className">-</span>
+            </div>
+            <div>
+              <span class="font-medium">Batch/Year:</span>
+              <span id="batchYear">-</span>
+            </div>
+            <div>
+              <span class="font-medium">Class Teacher:</span>
+              <span id="classTeacher">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Scores Table -->
+        <div class="bg-white rounded-xl shadow-md p-6 overflow-x-auto">
+          <h2 class="text-xl font-semibold mb-4 text-[#4F46E5]">
+            📊 Student Scores
+          </h2>
+          <table class="min-w-full border-collapse">
+            <thead class="sticky-header">
+              <tr class="bg-[#F9FAFB]">
+                <th class="px-4 py-2 text-left">S/N</th>
+                <th class="px-4 py-2 text-left">Name</th>
+                <th class="px-4 py-2 text-left">Test (20)</th>
+                <th class="px-4 py-2 text-left">Practical (20)</th>
+                <th class="px-4 py-2 text-left">Exams (60)</th>
+                <th class="px-4 py-2 text-left">Total (100)</th>
+                <th class="px-4 py-2 text-left">Grade</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody">
+              <!-- Rows inserted by JavaScript -->
+            </tbody>
+          </table>
+          <p class="text-xs text-[#6B7280] mt-2">
+            ✏️ Click on Test, Practical, or Exams cells to edit. Total and Grade
+            update automatically.
+          </p>
+        </div>
+
+        <!-- Export Button -->
+        <button
+          id="exportBtn"
+          class="bg-[#10B981] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#059669] transition"
+        >
+          Download Compiled Report
+        </button>
+      </div>
+
+      <!-- Validation / Messages Area -->
+      <div id="messages" class="mt-6 text-[#F59E0B]"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
