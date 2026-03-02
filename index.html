@@ -3,11 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GradeFlow – Class Grade Manager</title>
-    <!-- Tailwind CSS via CDN -->
+    <title>GradeFlow – Ultimate Grade Manager</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS (XLSX) -->
+    <!-- SheetJS -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <!-- jsPDF & html2canvas for PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Paystack (test mode) -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- localForage for offline -->
+    <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
     <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
@@ -17,10 +28,38 @@
   </head>
   <body class="bg-[#F9FAFB] text-[#1F2937]">
     <div id="app" class="container mx-auto p-6">
-      <h1 class="text-4xl font-semibold text-[#4F46E5] mb-2">GradeFlow</h1>
-      <p class="text-[#6B7280] mb-6">
-        Upload an Excel file to manage and calculate student grades.
-      </p>
+      <!-- Header with Auth -->
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-4xl font-semibold text-[#4F46E5]">GradeFlow</h1>
+        <div id="authSection">
+          <button
+            id="showLoginBtn"
+            class="bg-[#4F46E5] text-white px-4 py-2 rounded-lg hover:bg-[#4338CA]"
+          >
+            Login / Sign Up
+          </button>
+          <div id="userInfo" class="hidden flex items-center gap-2">
+            <span id="userName" class="text-sm font-medium"></span>
+            <button id="logoutBtn" class="text-sm text-red-600 hover:underline">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium Banner (shown if not premium) -->
+      <div
+        id="premiumBanner"
+        class="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6 hidden"
+      >
+        <p class="text-amber-700">
+          ✨ Upgrade to Premium for just ₦10,000 – get PDF exports, offline
+          mode, and individual student reports!
+          <button id="upgradeBtn" class="underline font-semibold">
+            Upgrade now
+          </button>
+        </p>
+      </div>
 
       <!-- Upload Area -->
       <div
@@ -41,16 +80,16 @@
         <p class="text-sm text-[#6B7280] mt-4">Supports .xlsx, .xls, .csv</p>
       </div>
 
-      <!-- Spinner (hidden by default) -->
+      <!-- Spinner -->
       <div id="spinner" class="hidden flex justify-center my-4">
         <div
           class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4F46E5]"
         ></div>
       </div>
 
-      <!-- Preview Sections (hidden initially) -->
+      <!-- Preview Section (hidden initially) -->
       <div id="preview" class="hidden space-y-8">
-        <!-- Auto-filled Metadata (now with Class) -->
+        <!-- Metadata -->
         <div class="bg-white rounded-xl shadow-md p-6">
           <h2 class="text-xl font-semibold mb-4 text-[#4F46E5]">
             📋 Class Details
@@ -90,30 +129,106 @@
                 <th class="px-4 py-2 text-left">Exams (60)</th>
                 <th class="px-4 py-2 text-left">Total (100)</th>
                 <th class="px-4 py-2 text-left">Grade</th>
+                <th class="px-4 py-2 text-left">Remark</th>
+                <th class="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
             <tbody id="studentsTableBody">
-              <!-- Rows inserted by JavaScript -->
+              <!-- Rows inserted by JS -->
             </tbody>
           </table>
           <p class="text-xs text-[#6B7280] mt-2">
-            ✏️ Click on Test, Practical, or Exams cells to edit. Total and Grade
-            update automatically.
+            ✏️ Click on Test, Practical, Exams, or Remark cells to edit. Total &
+            Grade update automatically.
           </p>
         </div>
 
-        <!-- Export Button -->
-        <button
-          id="exportBtn"
-          class="bg-[#10B981] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#059669] transition"
-        >
-          Download Compiled Report
-        </button>
+        <!-- Export Buttons -->
+        <div class="flex flex-wrap gap-4">
+          <button
+            id="exportExcelBtn"
+            class="bg-[#10B981] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#059669] transition"
+          >
+            📥 Download Excel Report
+          </button>
+          <button
+            id="exportPDFBtn"
+            class="bg-[#4F46E5] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#4338CA] transition"
+          >
+            📄 Download Class PDF
+          </button>
+        </div>
       </div>
 
-      <!-- Validation / Messages Area -->
+      <!-- Messages -->
       <div id="messages" class="mt-6 text-[#F59E0B]"></div>
     </div>
+
+    <!-- Auth Modal -->
+    <div
+      id="authModal"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-xl p-6 w-96 max-w-full">
+        <h3 class="text-xl font-semibold mb-4" id="modalTitle">Login</h3>
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          class="w-full p-2 border rounded mb-2"
+        />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          class="w-full p-2 border rounded mb-2"
+        />
+        <div id="extraFields" class="hidden">
+          <input
+            type="text"
+            id="fullName"
+            placeholder="Full Name"
+            class="w-full p-2 border rounded mb-2"
+          />
+          <input type="date" id="dob" class="w-full p-2 border rounded mb-2" />
+          <input
+            type="text"
+            id="org"
+            placeholder="Organisation / School"
+            class="w-full p-2 border rounded mb-2"
+          />
+          <input
+            type="text"
+            id="subject"
+            placeholder="Subject Taught"
+            class="w-full p-2 border rounded mb-2"
+          />
+        </div>
+        <div class="flex gap-2">
+          <button
+            id="loginBtn"
+            class="bg-[#4F46E5] text-white px-4 py-2 rounded flex-1"
+          >
+            Login
+          </button>
+          <button
+            id="signupBtn"
+            class="bg-gray-500 text-white px-4 py-2 rounded flex-1"
+          >
+            Sign Up
+          </button>
+        </div>
+        <button
+          id="closeModal"
+          class="mt-4 text-sm text-gray-600 hover:underline w-full text-center"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+
+    <!-- Hidden Report Card Template for PDF -->
+    <div id="reportCardTemplate" class="hidden"></div>
 
     <script src="script.js"></script>
   </body>
