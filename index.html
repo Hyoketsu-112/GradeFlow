@@ -4,526 +4,525 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GradeFlow — Grade Smarter. Teach Better.</title>
+    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
+    <!-- Libraries for Excel & PDF -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- NAV -->
-    <nav>
-      <div class="nav-inner">
-        <a class="logo" href="#">
-          <div class="logo-icon">
-            <svg viewBox="0 0 24 24">
-              <path
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-              />
-            </svg>
-          </div>
-          <span class="logo-text">Grade<span>Flow</span></span>
-        </a>
-        <div class="nav-links">
-          <a href="#how">How it works</a>
-          <a href="#features">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#" onclick="openModal()" class="nav-cta">Get Started Free</a>
-        </div>
-      </div>
-    </nav>
-
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-bg">
-        <div class="hero-blob blob1"></div>
-        <div class="hero-blob blob2"></div>
-      </div>
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span></span> Now available for Nigerian schools
-        </div>
-        <h1>
-          Grade Smarter.<br />Teach
-          <span class="accent underline-text">Better.</span>
-        </h1>
-        <p class="hero-sub">
-          GradeFlow turns hours of manual grade compilation into minutes. Upload
-          your score sheet, get beautiful PDF report cards — instantly.
-        </p>
-        <div class="hero-btns">
-          <a href="#" class="btn-primary" onclick="openModal()"
-            >🚀 Start for Free</a
-          >
-          <a href="#how" class="btn-secondary">See How It Works →</a>
-        </div>
-        <div class="hero-stats">
-          <div class="stat">
-            <div class="stat-num">4hrs</div>
-            <div class="stat-label">Saved per term</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">100%</div>
-            <div class="stat-label">Browser-based</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">0₦</div>
-            <div class="stat-label">To get started</div>
-          </div>
-          <div class="stat">
-            <div class="stat-num">A4</div>
-            <div class="stat-label">PDF report cards</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- APP MOCKUP -->
-    <section class="mockup-section">
-      <div class="mockup-wrap">
-        <div class="mockup-bar">
-          <div class="dot dot-red"></div>
-          <div class="dot dot-yellow"></div>
-          <div class="dot dot-green"></div>
-          <span class="mockup-title"
-            >GradeFlow — JSS 2A · Second Term · 2025/2026</span
-          >
-        </div>
-        <div class="mockup-body">
-          <div class="mock-header">
-            <span class="mock-h">📚 Class Result — Greenfield Academy</span>
-            <span class="mock-btn">⬇ Export PDFs</span>
-          </div>
-          <table class="mock-table">
-            <thead>
-              <tr>
-                <th>S/N</th>
-                <th>Student Name</th>
-                <th>Test /20</th>
-                <th>Practical /20</th>
-                <th>Exam /60</th>
-                <th>Total</th>
-                <th>Grade</th>
-                <th>Position</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="color: #888">01</td>
-                <td class="mock-name">Chidera Obi</td>
-                <td class="mock-score">18</td>
-                <td class="mock-score">17</td>
-                <td class="mock-score">52</td>
-                <td class="mock-score">87</td>
-                <td><span class="grade-a">A</span></td>
-                <td class="mock-pos">1st</td>
-              </tr>
-              <tr>
-                <td style="color: #888">02</td>
-                <td class="mock-name">Amaka Nwosu</td>
-                <td class="mock-score">16</td>
-                <td class="mock-score">15</td>
-                <td class="mock-score">47</td>
-                <td class="mock-score">78</td>
-                <td><span class="grade-b">B</span></td>
-                <td class="mock-pos">2nd</td>
-              </tr>
-              <tr>
-                <td style="color: #888">03</td>
-                <td class="mock-name">Emeka Adeyemi</td>
-                <td class="mock-score">14</td>
-                <td class="mock-score">12</td>
-                <td class="mock-score">38</td>
-                <td class="mock-score">64</td>
-                <td><span class="grade-b">B</span></td>
-                <td class="mock-pos">3rd</td>
-              </tr>
-              <tr>
-                <td style="color: #888">04</td>
-                <td class="mock-name">Fatima Bello</td>
-                <td class="mock-score">12</td>
-                <td class="mock-score">10</td>
-                <td class="mock-score">30</td>
-                <td class="mock-score">52</td>
-                <td><span class="grade-c">C</span></td>
-                <td class="mock-pos">4th</td>
-              </tr>
-              <tr>
-                <td style="color: #888">05</td>
-                <td class="mock-name">Tunde Okafor</td>
-                <td class="mock-score">8</td>
-                <td class="mock-score">9</td>
-                <td class="mock-score">18</td>
-                <td class="mock-score">35</td>
-                <td><span class="grade-f">F</span></td>
-                <td class="mock-pos">5th</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="section" id="how" style="max-width: 1200px; margin: 0 auto">
-      <div style="text-align: center">
-        <div class="section-tag">How It Works</div>
-        <h2 class="section-title">From Excel to Report Card in 3 Steps</h2>
-        <p class="section-sub" style="margin: 0 auto">
-          No technical knowledge required. If you can use a phone, you can use
-          GradeFlow.
-        </p>
-      </div>
-      <div class="steps">
-        <div class="step-card">
-          <div class="step-icon">📤</div>
-          <div class="step-num">1</div>
-          <div class="step-title">Upload Your Score Sheet</div>
-          <p class="step-desc">
-            Drag and drop your Excel or CSV file. GradeFlow automatically reads
-            student names, test scores, practical scores, and exam scores. No
-            reformatting needed.
-          </p>
-        </div>
-        <div class="step-card">
-          <div class="step-icon">⚡</div>
-          <div class="step-num">2</div>
-          <div class="step-title">Grades Compute Instantly</div>
-          <p class="step-desc">
-            GradeFlow calculates totals, assigns grades (A–F), generates
-            remarks, and ranks students by position — all in under 3 seconds.
-            You can edit any score manually too.
-          </p>
-        </div>
-        <div class="step-card">
-          <div class="step-icon">📄</div>
-          <div class="step-num">3</div>
-          <div class="step-title">Download Beautiful PDFs</div>
-          <p class="step-desc">
-            Export a professional A4 report card for each student — with your
-            school name, teacher name, subject breakdown, grade, and remark.
-            Ready to print or share digitally.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features-section" id="features">
-      <div style="text-align: center; max-width: 600px; margin: 0 auto">
-        <div class="section-tag">Features</div>
-        <h2 class="section-title">Everything a Teacher Needs</h2>
-        <p class="section-sub" style="margin: 0 auto">
-          Built by studying how Nigerian teachers actually work — not how we
-          think they work.
-        </p>
-      </div>
-      <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-icon indigo">📊</div>
-          <div class="feat-title">Excel & CSV Upload</div>
-          <p class="feat-desc">
-            Upload any score sheet format. GradeFlow intelligently detects
-            columns for names, test, practical, and exam scores — even from
-            messy files.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon green">🧮</div>
-          <div class="feat-title">Auto Grade Computation</div>
-          <p class="feat-desc">
-            Scores are computed the moment you upload. Test (20) + Practical
-            (20) + Exam (60) = Total (100). No calculator needed. No errors
-            possible.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon amber">📄</div>
-          <div class="feat-title">Branded PDF Report Cards</div>
-          <p class="feat-desc">
-            Each student gets a clean, professional A4 report card carrying your
-            school name, class, teacher, scores, grade, remark, and class
-            position.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon purple">✏️</div>
-          <div class="feat-title">Inline Score Editing</div>
-          <p class="feat-desc">
-            Click any score to edit it directly in the table. Grades and totals
-            update in real time. Perfect for last-minute corrections before
-            exporting.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon blue">🏆</div>
-          <div class="feat-title">Class Position Ranking</div>
-          <p class="feat-desc">
-            Students are automatically ranked 1st, 2nd, 3rd... based on total
-            score. Tied students share the same position. Fully automatic.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon green">📶</div>
-          <div class="feat-title">Works Offline</div>
-          <p class="feat-desc">
-            No internet? No problem. GradeFlow saves all your data locally. Use
-            it during exams, in remote schools, or anywhere — online or not.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon red">⚠️</div>
-          <div class="feat-title">Smart Validation</div>
-          <p class="feat-desc">
-            Missing scores are flagged instantly. Scores above the maximum are
-            highlighted. No grade is assigned until an exam score exists. Zero
-            errors.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon amber">🏫</div>
-          <div class="feat-title">Multi-Class Management</div>
-          <p class="feat-desc">
-            Manage JSS1A, JSS2B, SS3C — all from one dashboard. Switch between
-            classes instantly. Each class keeps its own independent records.
-          </p>
-        </div>
-        <div class="feat-card">
-          <div class="feat-icon indigo">📈</div>
-          <div class="feat-title">Performance Analytics</div>
-          <p class="feat-desc">
-            See class averages, highest and lowest scores, pass rates, and grade
-            distributions at a glance. Identify struggling students before it's
-            too late.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section class="pricing-section" id="pricing">
-      <div style="text-align: center">
-        <div class="section-tag">Pricing</div>
-        <h2 class="section-title">Simple, Honest Pricing</h2>
-        <p class="section-sub" style="margin: 0 auto">
-          One price per term. No hidden fees. Cancel anytime.
-        </p>
-      </div>
-      <div class="pricing-grid">
-        <!-- Free -->
-        <div class="price-card">
-          <div class="plan-name">Free Forever</div>
-          <div class="plan-price">₦0<span>/term</span></div>
-          <p class="plan-desc">
-            Perfect for trying GradeFlow out with a single class.
-          </p>
-          <ul class="plan-features">
-            <li><span class="check">✓</span> 1 class, up to 30 students</li>
-            <li><span class="check">✓</span> Manual score entry</li>
-            <li><span class="check">✓</span> Auto grade computation</li>
-            <li><span class="check">✓</span> CSV download</li>
-            <li>
-              <span class="cross">✗</span>
-              <span style="color: var(--muted)">Excel upload</span>
-            </li>
-            <li>
-              <span class="cross">✗</span>
-              <span style="color: var(--muted)">PDF report cards</span>
-            </li>
-            <li>
-              <span class="cross">✗</span>
-              <span style="color: var(--muted)">Offline mode</span>
-            </li>
-          </ul>
-          <button class="plan-btn free" onclick="openModal()">
-            Start Free
-          </button>
-        </div>
-        <!-- Standard -->
-        <div class="price-card popular">
-          <div class="popular-badge">⭐ Most Popular</div>
-          <div class="plan-name">Standard</div>
-          <div class="plan-price">₦10,000<span>/term</span></div>
-          <p class="plan-desc">
-            Best for individual class teachers who want the full experience.
-          </p>
-          <ul class="plan-features">
-            <li>
-              <span class="check">✓</span> Up to 3 classes, 50 students each
-            </li>
-            <li><span class="check">✓</span> Excel & CSV upload</li>
-            <li><span class="check">✓</span> Branded PDF report cards</li>
-            <li><span class="check">✓</span> Inline score editing</li>
-            <li><span class="check">✓</span> Class position ranking</li>
-            <li><span class="check">✓</span> Offline mode</li>
-            <li><span class="check">✓</span> Email support</li>
-          </ul>
-          <button class="plan-btn paid" onclick="openModal()">
-            Get Standard — ₦10,000
-          </button>
-        </div>
-        <!-- School -->
-        <div class="price-card">
-          <div class="plan-name">School Plan</div>
-          <div class="plan-price">₦30,000<span>/term</span></div>
-          <p class="plan-desc">
-            For schools that want to run the entire result process on GradeFlow.
-          </p>
-          <ul class="plan-features">
-            <li><span class="check">✓</span> Unlimited classes & students</li>
-            <li><span class="check">✓</span> Up to 20 teacher accounts</li>
-            <li><span class="check">✓</span> School logo on all PDFs</li>
-            <li>
-              <span class="check">✓</span> Bulk PDF download (entire class)
-            </li>
-            <li><span class="check">✓</span> Admin analytics dashboard</li>
-            <li><span class="check">✓</span> Parent result links</li>
-            <li>
-              <span class="check">✓</span> Priority support + onboarding call
-            </li>
-          </ul>
-          <button class="plan-btn school" onclick="openModal()">
-            Get School Plan — ₦30,000
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section class="testi-section">
-      <div style="text-align: center">
-        <div class="section-tag">Testimonials</div>
-        <h2 class="section-title">Teachers Love GradeFlow</h2>
-      </div>
-      <div class="testi-grid">
-        <div class="testi-card">
-          <div class="stars">★★★★★</div>
-          <p class="testi-text">
-            "What used to take me an entire Saturday now takes 15 minutes. The
-            PDF report cards look more professional than anything I've done
-            before."
-          </p>
-          <div class="testi-author">
-            <div class="avatar av1">A</div>
-            <div>
-              <div class="author-name">Mrs. Adaeze Okonkwo</div>
-              <div class="author-role">
-                Mathematics Teacher · Greenfield Academy, Lagos
-              </div>
+    <!-- ========== LANDING PAGE ========== -->
+    <div id="page-landing">
+      <!-- navigation -->
+      <nav>
+        <div class="nav-inner">
+          <a class="logo" onclick="scrollToTop()">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                />
+              </svg>
             </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="stars">★★★★★</div>
-          <p class="testi-text">
-            "Our school switched to GradeFlow this term. All 12 teachers use it.
-            The admin dashboard shows us exactly how every class is performing.
-            Incredible."
-          </p>
-          <div class="testi-author">
-            <div class="avatar av2">E</div>
-            <div>
-              <div class="author-name">Mr. Emmanuel Okoro</div>
-              <div class="author-role">
-                Vice Principal · Sunrise Secondary School, Abuja
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="stars">★★★★★</div>
-          <p class="testi-text">
-            "I was skeptical at first. But after uploading my first Excel sheet
-            and seeing 38 report cards generated in seconds, I became a
-            believer."
-          </p>
-          <div class="testi-author">
-            <div class="avatar av3">F</div>
-            <div>
-              <div class="author-name">Miss Fatima Yusuf</div>
-              <div class="author-role">
-                English Teacher · Al-Noor School, Kano
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta-section">
-      <div class="cta-content">
-        <h2>Start Compiling Grades in Minutes</h2>
-        <p>
-          Join teachers across Nigeria who've taken back their weekends. Free to
-          start. No credit card required.
-        </p>
-        <a href="#" class="btn-white" onclick="openModal()"
-          >🚀 Create Your Free Account</a
-        >
-        <p class="cta-note">
-          ✓ Free forever plan &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓
-          Works offline
-        </p>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-      <div class="footer-inner">
-        <div class="footer-top">
-          <div class="footer-brand">
-            <a class="logo" href="#" style="text-decoration: none">
-              <div class="logo-icon">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                  />
-                </svg>
-              </div>
-              <span class="logo-text" style="color: #fff"
-                >Grade<span>Flow</span></span
-              >
-            </a>
-            <p>
-              The grade compilation platform built specifically for Nigerian
-              schools. Fast, beautiful, and reliable.
-            </p>
-          </div>
-          <div class="footer-col">
-            <h4>Product</h4>
+            <span class="logo-text">Grade<span>Flow</span></span>
+          </a>
+          <div class="nav-links">
             <a href="#how">How it works</a>
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
-          </div>
-          <div class="footer-col">
-            <h4>Support</h4>
-            <a href="#">Help Center</a>
-            <a href="#">Contact Us</a>
-            <a href="#">WhatsApp Support</a>
-          </div>
-          <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Refund Policy</a>
+            <a href="#" onclick="openAuthModal()" class="nav-cta"
+              >Get Started Free</a
+            >
           </div>
         </div>
-        <div class="footer-bottom">
-          <p>© 2026 GradeFlow. All rights reserved.</p>
-          <div class="footer-badges">
-            <span class="badge-pill">🔒 Secure</span>
-            <span class="badge-pill">📶 Offline-ready</span>
-            <span class="badge-pill">🇳🇬 Made for Nigeria</span>
-          </div>
-        </div>
-      </div>
-    </footer>
+      </nav>
 
-    <!-- AUTH MODAL -->
+      <!-- hero -->
+      <section class="hero">
+        <div class="hero-bg">
+          <div class="hero-blob blob1"></div>
+          <div class="hero-blob blob2"></div>
+        </div>
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span></span> Now available for Nigerian schools
+          </div>
+          <h1>
+            Grade Smarter.<br />Teach
+            <span class="accent underline-text">Better.</span>
+          </h1>
+          <p class="hero-sub">
+            GradeFlow turns hours of manual grade compilation into minutes.
+            Upload your score sheet, get beautiful PDF report cards — instantly.
+          </p>
+          <div class="hero-btns">
+            <button class="btn-primary-hero" onclick="openAuthModal()">
+              🚀 Start for Free
+            </button>
+            <a href="#how" class="btn-secondary-hero">See How It Works →</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-num">4hrs</div>
+              <div class="stat-label">Saved per term</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">100%</div>
+              <div class="stat-label">Browser-based</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">0₦</div>
+              <div class="stat-label">To get started</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">A4</div>
+              <div class="stat-label">PDF report cards</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- mockup -->
+      <section class="mockup-section">
+        <div class="mockup-wrap">
+          <div class="mockup-bar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <span class="mockup-title"
+              >GradeFlow — JSS 2A · Second Term · 2025/2026</span
+            >
+          </div>
+          <div class="mockup-body">
+            <div class="mock-header">
+              <span class="mock-h">📚 Class Result — Greenfield Academy</span
+              ><span class="mock-btn">⬇ Export PDFs</span>
+            </div>
+            <table class="mock-table">
+              <thead>
+                <tr>
+                  <th>S/N</th>
+                  <th>Student Name</th>
+                  <th>Test /20</th>
+                  <th>Practical /20</th>
+                  <th>Exam /60</th>
+                  <th>Total</th>
+                  <th>Grade</th>
+                  <th>Position</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color: #888">01</td>
+                  <td class="mock-name">Chidera Obi</td>
+                  <td class="mock-score">18</td>
+                  <td class="mock-score">17</td>
+                  <td class="mock-score">52</td>
+                  <td class="mock-score">87</td>
+                  <td><span class="grade-a">A</span></td>
+                  <td class="mock-pos">1st</td>
+                </tr>
+                <tr>
+                  <td style="color: #888">02</td>
+                  <td class="mock-name">Amaka Nwosu</td>
+                  <td class="mock-score">16</td>
+                  <td class="mock-score">15</td>
+                  <td class="mock-score">47</td>
+                  <td class="mock-score">78</td>
+                  <td><span class="grade-b">B</span></td>
+                  <td class="mock-pos">2nd</td>
+                </tr>
+                <tr>
+                  <td style="color: #888">03</td>
+                  <td class="mock-name">Emeka Adeyemi</td>
+                  <td class="mock-score">14</td>
+                  <td class="mock-score">12</td>
+                  <td class="mock-score">38</td>
+                  <td class="mock-score">64</td>
+                  <td><span class="grade-b">B</span></td>
+                  <td class="mock-pos">3rd</td>
+                </tr>
+                <tr>
+                  <td style="color: #888">04</td>
+                  <td class="mock-name">Fatima Bello</td>
+                  <td class="mock-score">12</td>
+                  <td class="mock-score">10</td>
+                  <td class="mock-score">30</td>
+                  <td class="mock-score">52</td>
+                  <td><span class="grade-c">C</span></td>
+                  <td class="mock-pos">4th</td>
+                </tr>
+                <tr>
+                  <td style="color: #888">05</td>
+                  <td class="mock-name">Tunde Okafor</td>
+                  <td class="mock-score">8</td>
+                  <td class="mock-score">9</td>
+                  <td class="mock-score">18</td>
+                  <td class="mock-score">35</td>
+                  <td><span class="grade-f">F</span></td>
+                  <td class="mock-pos">5th</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- how it works -->
+      <section
+        class="lp-section"
+        id="how"
+        style="max-width: 1200px; margin: 0 auto"
+      >
+        <div style="text-align: center">
+          <div class="section-tag">How It Works</div>
+          <h2 class="section-title">From Excel to Report Card in 3 Steps</h2>
+          <p class="section-sub">
+            No technical knowledge required. If you can use a phone, you can use
+            GradeFlow.
+          </p>
+        </div>
+        <div class="steps">
+          <div class="step-card">
+            <div class="step-icon">📤</div>
+            <div class="step-num">1</div>
+            <div class="step-title">Upload Your Score Sheet</div>
+            <p class="step-desc">
+              Drag and drop your Excel or CSV file. GradeFlow automatically
+              reads student names, test scores, practical scores, and exam
+              scores. No reformatting needed.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">⚡</div>
+            <div class="step-num">2</div>
+            <div class="step-title">Grades Compute Instantly</div>
+            <p class="step-desc">
+              GradeFlow calculates totals, assigns grades (A–F), generates
+              remarks, and ranks students by position — all in under 3 seconds.
+              Edit any score manually too.
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">📄</div>
+            <div class="step-num">3</div>
+            <div class="step-title">Download Beautiful PDFs</div>
+            <p class="step-desc">
+              Export a professional A4 report card for each student — with your
+              school name, teacher name, subject breakdown, grade, and remark.
+              Ready to print or share.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- features -->
+      <section class="features-section" id="features">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto">
+          <div class="section-tag">Features</div>
+          <h2 class="section-title">Everything a Teacher Needs</h2>
+          <p class="section-sub">
+            Built by studying how Nigerian teachers actually work — not how we
+            think they work.
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feat-card">
+            <div class="feat-icon indigo">📊</div>
+            <div class="feat-title">Excel & CSV Upload</div>
+            <p class="feat-desc">
+              Upload any score sheet format. GradeFlow intelligently detects
+              columns for names, test, practical, and exam scores — even from
+              messy files.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon green">🧮</div>
+            <div class="feat-title">Auto Grade Computation</div>
+            <p class="feat-desc">
+              Scores computed instantly. Test (20) + Practical (20) + Exam (60)
+              = Total (100). No calculator needed. No errors possible.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon amber">📄</div>
+            <div class="feat-title">Branded PDF Report Cards</div>
+            <p class="feat-desc">
+              Each student gets a clean A4 report card with your school name,
+              class, teacher, scores, grade, remark, and class position.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon purple">✏️</div>
+            <div class="feat-title">Inline Score Editing</div>
+            <p class="feat-desc">
+              Click any score to edit it directly. Grades and totals update in
+              real time. Perfect for last-minute corrections.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon blue">🏆</div>
+            <div class="feat-title">Class Position Ranking</div>
+            <p class="feat-desc">
+              Students ranked 1st, 2nd, 3rd... automatically. Tied students
+              share the same position. Fully automatic.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon green">📶</div>
+            <div class="feat-title">Works Offline</div>
+            <p class="feat-desc">
+              No internet? No problem. GradeFlow saves all data locally. Use it
+              during exams, in remote schools, anywhere.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon red">⚠️</div>
+            <div class="feat-title">Smart Validation</div>
+            <p class="feat-desc">
+              Missing scores flagged instantly. Scores above the maximum
+              highlighted. No grade assigned without an exam score.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon amber">🏫</div>
+            <div class="feat-title">Multi-Class Management</div>
+            <p class="feat-desc">
+              Manage JSS1A, JSS2B, SS3C — all from one dashboard. Switch between
+              classes instantly.
+            </p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon indigo">📈</div>
+            <div class="feat-title">Performance Analytics</div>
+            <p class="feat-desc">
+              Class averages, highest/lowest scores, pass rates, and grade
+              distributions at a glance.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- pricing -->
+      <section class="pricing-section" id="pricing">
+        <div style="text-align: center">
+          <div class="section-tag">Pricing</div>
+          <h2 class="section-title">Simple, Honest Pricing</h2>
+          <p class="section-sub">
+            One price per term. No hidden fees. Cancel anytime.
+          </p>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="plan-name">Free Forever</div>
+            <div class="plan-price">₦0<span>/term</span></div>
+            <p class="plan-desc">
+              Perfect for trying GradeFlow with a single class.
+            </p>
+            <ul class="plan-features">
+              <li><span class="check">✓</span> 1 class, up to 30 students</li>
+              <li><span class="check">✓</span> Manual score entry</li>
+              <li><span class="check">✓</span> Auto grade computation</li>
+              <li><span class="check">✓</span> CSV download</li>
+              <li>
+                <span class="cross">✗</span
+                ><span style="color: var(--muted)">Excel upload</span>
+              </li>
+              <li>
+                <span class="cross">✗</span
+                ><span style="color: var(--muted)">PDF report cards</span>
+              </li>
+              <li>
+                <span class="cross">✗</span
+                ><span style="color: var(--muted)">Offline mode</span>
+              </li>
+            </ul>
+            <button class="plan-btn free" onclick="openAuthModal()">
+              Start Free
+            </button>
+          </div>
+          <div class="price-card popular">
+            <div class="popular-badge">⭐ Most Popular</div>
+            <div class="plan-name">Standard</div>
+            <div class="plan-price">₦10,000<span>/term</span></div>
+            <p class="plan-desc">
+              Best for individual teachers who want the full experience.
+            </p>
+            <ul class="plan-features">
+              <li>
+                <span class="check">✓</span> Up to 3 classes, 50 students each
+              </li>
+              <li><span class="check">✓</span> Excel & CSV upload</li>
+              <li><span class="check">✓</span> Branded PDF report cards</li>
+              <li><span class="check">✓</span> Inline score editing</li>
+              <li><span class="check">✓</span> Class position ranking</li>
+              <li><span class="check">✓</span> Offline mode</li>
+              <li><span class="check">✓</span> Email support</li>
+            </ul>
+            <button class="plan-btn paid" onclick="openAuthModal()">
+              Get Standard — ₦10,000
+            </button>
+          </div>
+          <div class="price-card">
+            <div class="plan-name">School Plan</div>
+            <div class="plan-price">₦30,000<span>/term</span></div>
+            <p class="plan-desc">
+              For schools running the entire result process on GradeFlow.
+            </p>
+            <ul class="plan-features">
+              <li><span class="check">✓</span> Unlimited classes & students</li>
+              <li><span class="check">✓</span> Up to 20 teacher accounts</li>
+              <li><span class="check">✓</span> School logo on all PDFs</li>
+              <li><span class="check">✓</span> Bulk PDF download</li>
+              <li><span class="check">✓</span> Admin analytics dashboard</li>
+              <li><span class="check">✓</span> Parent result links</li>
+              <li>
+                <span class="check">✓</span> Priority support + onboarding
+              </li>
+            </ul>
+            <button class="plan-btn school-btn" onclick="openAuthModal()">
+              Get School Plan — ₦30,000
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- testimonials -->
+      <section class="testi-section">
+        <div style="text-align: center">
+          <div class="section-tag">Testimonials</div>
+          <h2 class="section-title">Teachers Love GradeFlow</h2>
+        </div>
+        <div class="testi-grid">
+          <div class="testi-card">
+            <div class="stars">★★★★★</div>
+            <p class="testi-text">
+              "What used to take me an entire Saturday now takes 15 minutes. The
+              PDF report cards look more professional than anything I've done
+              before."
+            </p>
+            <div class="testi-author">
+              <div class="avatar av1">A</div>
+              <div>
+                <div class="author-name">Mrs. Adaeze Okonkwo</div>
+                <div class="author-role">
+                  Mathematics Teacher · Greenfield Academy, Lagos
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="stars">★★★★★</div>
+            <p class="testi-text">
+              "Our school switched to GradeFlow this term. All 12 teachers use
+              it. The admin dashboard shows us exactly how every class is
+              performing. Incredible."
+            </p>
+            <div class="testi-author">
+              <div class="avatar av2">E</div>
+              <div>
+                <div class="author-name">Mr. Emmanuel Okoro</div>
+                <div class="author-role">
+                  Vice Principal · Sunrise Secondary School, Abuja
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="stars">★★★★★</div>
+            <p class="testi-text">
+              "I was skeptical at first. But after uploading my first Excel
+              sheet and seeing 38 report cards generated in seconds, I became a
+              believer."
+            </p>
+            <div class="testi-author">
+              <div class="avatar av3">F</div>
+              <div>
+                <div class="author-name">Miss Fatima Yusuf</div>
+                <div class="author-role">
+                  English Teacher · Al-Noor School, Kano
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- cta -->
+      <section class="cta-section">
+        <div class="cta-content">
+          <h2>Start Compiling Grades in Minutes</h2>
+          <p>
+            Join teachers across Nigeria who've taken back their weekends. Free
+            to start. No credit card required.
+          </p>
+          <button class="btn-white" onclick="openAuthModal()">
+            🚀 Create Your Free Account
+          </button>
+          <p class="cta-note">
+            ✓ Free forever plan &nbsp;·&nbsp; ✓ No credit card &nbsp;·&nbsp; ✓
+            Works offline
+          </p>
+        </div>
+      </section>
+
+      <!-- footer -->
+      <footer>
+        <div class="footer-inner">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <div class="logo">
+                <div class="logo-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                </div>
+                <span class="logo-text" style="color: #fff"
+                  >Grade<span>Flow</span></span
+                >
+              </div>
+              <p>
+                The grade compilation platform built specifically for Nigerian
+                schools. Fast, beautiful, and reliable.
+              </p>
+            </div>
+            <div class="footer-col">
+              <h4>Product</h4>
+              <a href="#how">How it works</a><a href="#features">Features</a
+              ><a href="#pricing">Pricing</a>
+            </div>
+            <div class="footer-col">
+              <h4>Support</h4>
+              <a>Help Center</a><a>Contact Us</a><a>WhatsApp Support</a>
+            </div>
+            <div class="footer-col">
+              <h4>Legal</h4>
+              <a>Privacy Policy</a><a>Terms of Service</a><a>Refund Policy</a>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>© 2026 GradeFlow. All rights reserved.</p>
+            <div class="footer-badges">
+              <span class="badge-pill">🔒 Secure</span
+              ><span class="badge-pill">📶 Offline-ready</span
+              ><span class="badge-pill">🇳🇬 Made for Nigeria</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ========== AUTH MODAL ========== -->
     <div class="modal-overlay" id="authModal">
-      <div class="modal">
-        <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeAuthModal()">✕</button>
         <div class="modal-logo">
           <div class="logo-icon">
             <svg
@@ -537,70 +536,516 @@
           </div>
           <span class="logo-text">Grade<span>Flow</span></span>
         </div>
-
         <div class="tabs">
-          <div class="tab active" id="tab-signup" onclick="switchTab('signup')">
+          <div
+            class="tab active"
+            id="tab-signup"
+            onclick="switchAuthTab('signup')"
+          >
             Create Account
           </div>
-          <div class="tab" id="tab-login" onclick="switchTab('login')">
+          <div class="tab" id="tab-login" onclick="switchAuthTab('login')">
             Sign In
           </div>
         </div>
-
-        <!-- SIGNUP -->
+        <!-- signup -->
         <div id="form-signup">
           <div class="form-row">
             <div class="form-group">
               <label>Full Name</label
-              ><input type="text" placeholder="Mrs. Adaeze Okonkwo" />
+              ><input
+                type="text"
+                id="su-name"
+                placeholder="Mrs. Adaeze Okonkwo"
+              />
             </div>
             <div class="form-group">
-              <label>Date of Birth</label><input type="date" />
+              <label>Date of Birth</label><input type="date" id="su-dob" />
             </div>
           </div>
           <div class="form-group">
             <label>Organization / School Name</label
-            ><input type="text" placeholder="Greenfield Academy" />
+            ><input type="text" id="su-org" placeholder="Greenfield Academy" />
           </div>
           <div class="form-group">
             <label>Subject(s) Taught</label
-            ><input type="text" placeholder="Mathematics, Further Maths" />
+            ><input
+              type="text"
+              id="su-subject"
+              placeholder="Mathematics, Further Maths"
+            />
           </div>
           <div class="form-group">
             <label>Email Address</label
-            ><input type="email" placeholder="teacher@school.edu.ng" />
+            ><input
+              type="email"
+              id="su-email"
+              placeholder="teacher@school.edu.ng"
+            />
           </div>
           <div class="form-group">
             <label>Password</label
-            ><input type="password" placeholder="Min. 8 characters" />
+            ><input
+              type="password"
+              id="su-pass"
+              placeholder="Min. 8 characters"
+            />
           </div>
           <button class="submit-btn" onclick="handleSignup()">
             Create My Free Account →
           </button>
-          <p class="modal-footer">
-            Already have an account? <a onclick="switchTab('login')">Sign in</a>
+          <p class="modal-footer-txt">
+            Already have an account?
+            <a onclick="switchAuthTab('login')">Sign in</a>
           </p>
         </div>
-
-        <!-- LOGIN -->
+        <!-- login -->
         <div id="form-login" style="display: none">
           <div class="form-group">
             <label>Email Address</label
-            ><input type="email" placeholder="teacher@school.edu.ng" />
+            ><input
+              type="email"
+              id="li-email"
+              placeholder="teacher@school.edu.ng"
+            />
           </div>
           <div class="form-group">
             <label>Password</label
-            ><input type="password" placeholder="Your password" />
+            ><input type="password" id="li-pass" placeholder="Your password" />
           </div>
           <button class="submit-btn" onclick="handleLogin()">
             Sign In to GradeFlow →
           </button>
-          <p class="modal-footer">
+          <p class="modal-footer-txt">
             Don't have an account?
-            <a onclick="switchTab('signup')">Create one free</a>
+            <a onclick="switchAuthTab('signup')">Create one free</a>
           </p>
         </div>
       </div>
     </div>
+
+    <!-- ========== DASHBOARD ========== -->
+    <div id="page-dashboard">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                />
+              </svg>
+            </div>
+            <span class="logo-text">Grade<span>Flow</span></span>
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-info">
+            <div class="user-avatar" id="db-avatar">A</div>
+            <div>
+              <div class="user-name" id="db-username">Mrs. Adaeze</div>
+              <div class="user-role" id="db-userrole">Teacher</div>
+              <div class="plan-badge" id="plan-badge">⭐ Standard Plan</div>
+            </div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <div
+            class="nav-item active"
+            onclick="switchDashboardTab('dashboard')"
+          >
+            <span class="icon">🏠</span> Dashboard
+          </div>
+          <div
+            class="nav-item"
+            onclick="showToast('📚 My Classes — coming soon!')"
+          >
+            <span class="icon">📚</span> My Classes
+          </div>
+          <div class="nav-section-label">Reports</div>
+          <div class="nav-item" id="nav-export-pdf" onclick="exportAllPDFs()">
+            <span class="icon">📄</span> Export PDFs
+          </div>
+          <div
+            class="nav-item"
+            onclick="showToast('📊 Analytics coming soon!')"
+          >
+            <span class="icon">📊</span> Analytics
+          </div>
+          <div class="nav-section-label">Account</div>
+          <div class="nav-item" onclick="showToast('⚙️ Settings coming soon!')">
+            <span class="icon">⚙️</span> Settings
+          </div>
+          <div class="nav-item" onclick="handleLogout()">
+            <span class="icon">🚪</span> Log Out
+          </div>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="upgrade-card" id="upgrade-card">
+            <p>
+              Upgrade to <strong style="color: #fcd34d">Standard</strong> for
+              Excel uploads & PDF exports.
+            </p>
+            <button
+              class="upgrade-btn-side"
+              onclick="simulatePayment('standard')"
+            >
+              Upgrade — ₦10,000
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="db-main">
+        <div class="topbar">
+          <div class="topbar-left">
+            <button
+              class="hamburger"
+              id="hamburgerBtn"
+              onclick="toggleSidebar()"
+            >
+              ☰
+            </button>
+            <div>
+              <h2 id="db-greeting">Good morning 👋</h2>
+              <p id="db-school">Greenfield Academy · 2025/2026 Session</p>
+            </div>
+          </div>
+          <div class="topbar-right">
+            <span class="term-badge">📅 Second Term</span>
+            <div class="notif">🔔</div>
+            <div class="user-avatar" id="db-avatar2">A</div>
+          </div>
+        </div>
+        <div class="db-content">
+          <div class="offline-banner" id="offline-banner">
+            🔴 You're offline — changes save locally and sync when reconnected.
+          </div>
+
+          <!-- stats -->
+          <div class="stats-row">
+            <div class="stat-card blue">
+              <div class="stat-icon">📚</div>
+              <div class="stat-label">Total Classes</div>
+              <div class="stat-val" id="totalClasses">0</div>
+              <div class="stat-sub">Active this term</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-icon">👥</div>
+              <div class="stat-label">Total Students</div>
+              <div class="stat-val" id="totalStudents">0</div>
+              <div class="stat-sub">Across all classes</div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-icon">📊</div>
+              <div class="stat-label">Class Average</div>
+              <div class="stat-val" id="classAvg">—</div>
+              <div class="stat-sub">Active class</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-icon">✅</div>
+              <div class="stat-label">Pass Rate</div>
+              <div class="stat-val" id="passRate">—</div>
+              <div class="stat-sub">Score ≥ 40</div>
+            </div>
+          </div>
+
+          <!-- classes header with upload -->
+          <div class="db-section-header">
+            <div class="db-section-title">📚 My Classes</div>
+            <div style="display: flex; gap: 8px">
+              <input
+                type="file"
+                id="excelUpload"
+                accept=".xlsx,.xls,.csv"
+                style="display: none"
+              />
+              <button
+                class="btn btn-outline btn-sm"
+                id="uploadExcelBtn"
+                onclick="document.getElementById('excelUpload').click()"
+              >
+                📤 Upload Excel
+              </button>
+              <button
+                class="btn btn-primary btn-sm"
+                onclick="openAddClassModal()"
+              >
+                + New Class
+              </button>
+            </div>
+          </div>
+          <div class="classes-grid" id="classesGrid"></div>
+
+          <!-- score panel -->
+          <div id="scorePanel" style="display: none">
+            <div class="db-section-header" style="margin-top: 8px">
+              <div class="db-section-title" id="panelTitle">📋 Score Sheet</div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <button
+                  class="btn btn-outline btn-sm"
+                  onclick="addStudentRow()"
+                >
+                  + Add Student
+                </button>
+                <button class="btn btn-success btn-sm" onclick="saveData()">
+                  💾 Save
+                </button>
+                <button
+                  class="btn btn-primary btn-sm"
+                  id="exportPdfBtn"
+                  onclick="exportAllPDFs()"
+                >
+                  ⬇ Export PDFs
+                </button>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <span id="activeClassName">—</span
+                  ><span
+                    style="font-size: 12px; color: var(--muted)"
+                    id="activeClassMeta"
+                  ></span>
+                </div>
+                <div class="panel-actions">
+                  <div class="search-box">
+                    <span>🔍</span
+                    ><input
+                      type="text"
+                      placeholder="Search student..."
+                      oninput="filterStudents(this.value)"
+                    />
+                  </div>
+                  <button
+                    class="btn btn-outline btn-sm"
+                    onclick="sortByScore()"
+                  >
+                    ⬆ Sort by Score
+                  </button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table class="score-table">
+                  <thead>
+                    <tr>
+                      <th>S/N</th>
+                      <th>Student Name</th>
+                      <th>Test /20</th>
+                      <th>Practical /20</th>
+                      <th>Exam /60</th>
+                      <th>Total</th>
+                      <th>Grade</th>
+                      <th>Remark</th>
+                      <th>Position</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="scoreBody"></tbody>
+                  <tbody id="addRowBody">
+                    <tr class="add-row">
+                      <td style="color: var(--muted)">—</td>
+                      <td>
+                        <input
+                          class="add-input add-name-input"
+                          type="text"
+                          placeholder="Student name..."
+                          id="newName"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="score-input"
+                          type="number"
+                          min="0"
+                          max="20"
+                          id="newTest"
+                          placeholder="0"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="score-input"
+                          type="number"
+                          min="0"
+                          max="20"
+                          id="newPrac"
+                          placeholder="0"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="score-input"
+                          type="number"
+                          min="0"
+                          max="60"
+                          id="newExam"
+                          placeholder="0"
+                        />
+                      </td>
+                      <td
+                        colspan="4"
+                        style="color: var(--muted); font-size: 13px"
+                      >
+                        ← Fill scores then click Add
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-primary btn-sm"
+                          onclick="confirmAddStudent()"
+                        >
+                          Add ✓
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="summary-bar">
+                <div class="sum-item">
+                  <div class="sum-label">Students</div>
+                  <div class="sum-val indigo" id="sumStudents">0</div>
+                </div>
+                <div class="sum-item">
+                  <div class="sum-label">Highest</div>
+                  <div class="sum-val green" id="sumHigh">—</div>
+                </div>
+                <div class="sum-item">
+                  <div class="sum-label">Lowest</div>
+                  <div class="sum-val red" id="sumLow">—</div>
+                </div>
+                <div class="sum-item">
+                  <div class="sum-label">Average</div>
+                  <div class="sum-val indigo" id="sumAvg">—</div>
+                </div>
+                <div class="sum-item">
+                  <div class="sum-label">Pass Rate</div>
+                  <div class="sum-val green" id="sumPass">—</div>
+                </div>
+                <div class="sum-item">
+                  <div class="sum-label">Grade A's</div>
+                  <div class="sum-val indigo" id="sumA">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD CLASS MODAL -->
+    <div class="db-modal-overlay" id="classModal">
+      <div class="db-modal">
+        <h3>➕ New Class</h3>
+        <p>Set up a new class for this term.</p>
+        <div class="form-group">
+          <label>Class Name</label
+          ><input
+            type="text"
+            id="newClassName"
+            placeholder="e.g. JSS 2A, SS 3B"
+          />
+        </div>
+        <div class="form-group">
+          <label>Subject</label
+          ><input
+            type="text"
+            id="newClassSubject"
+            placeholder="e.g. Mathematics"
+          />
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-outline" onclick="closeAddClassModal()">
+            Cancel</button
+          ><button class="btn btn-primary" onclick="confirmAddClass()">
+            Create Class
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF TEMPLATE (hidden) -->
+    <div
+      id="pdf-template"
+      style="
+        width: 210mm;
+        padding: 15mm;
+        font-family: Inter, sans-serif;
+        background: white;
+        border: 1px solid #ddd;
+      "
+    >
+      <div
+        style="
+          text-align: center;
+          border-bottom: 2px solid #4f46e5;
+          padding-bottom: 10px;
+        "
+      >
+        <h1 style="font-size: 24px; font-weight: 800">{{schoolName}}</h1>
+        <p style="font-size: 14px; color: #6b7280">STUDENT ACADEMIC REPORT</p>
+      </div>
+      <div
+        style="display: flex; justify-content: space-between; margin: 20px 0"
+      >
+        <div><strong>Name:</strong> {{studentName}}</div>
+        <div><strong>Class:</strong> {{className}}</div>
+        <div><strong>Term:</strong> Second Term 2025/2026</div>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0">
+        <thead style="background: #eef2ff">
+          <tr>
+            <th style="padding: 8px">Subject</th>
+            <th>Test (20)</th>
+            <th>Practical (20)</th>
+            <th>Exam (60)</th>
+            <th>Total (100)</th>
+            <th>Grade</th>
+            <th>Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="text-align: center">
+            <td>{{subject}}</td>
+            <td>{{test}}</td>
+            <td>{{prac}}</td>
+            <td>{{exam}}</td>
+            <td>{{total}}</td>
+            <td>{{grade}}</td>
+            <td>{{remark}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 30px">
+        <p><strong>Class Position:</strong> {{position}}</p>
+        <p><strong>Teacher's Remark:</strong> {{remark}}</p>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+          "
+        >
+          <span>Teacher's Signature: ____________________</span
+          ><span>Date: _______________</span>
+        </div>
+      </div>
+      <div
+        style="
+          text-align: center;
+          margin-top: 20px;
+          color: #9ca3af;
+          font-size: 10px;
+        "
+      >
+        Generated with GradeFlow
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+    <script src="script.js"></script>
   </body>
 </html>
