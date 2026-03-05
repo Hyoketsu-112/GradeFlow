@@ -1,4 +1,4 @@
-// <!-- ========== SCRIPT (full) ========== -->
+// ========== GRADE FLOW – PHASE 2 (Professional & Polished) ==========
 (function () {
   // ----- STATE -----
   let currentUser = JSON.parse(localStorage.getItem("gf_user") || "null");
@@ -25,14 +25,25 @@
   const emojis = ["📐", "📏", "📊", "🔬", "🌍", "✏️", "🎨", "🏫", "📖", "🔢"];
 
   // ----- UTILITIES -----
-  function showToast(msg) {
+  function showToast(msg, type = "info") {
     const t = document.getElementById("toast");
     t.textContent = msg;
-    t.classList.add("show");
+    t.className = "toast show " + type;
     clearTimeout(window.toastTimer);
-    window.toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+    window.toastTimer = setTimeout(() => {
+      t.classList.remove("show");
+      t.className = "toast";
+    }, 2800);
   }
   window.showToast = showToast;
+
+  function showLoading(message = "Processing...") {
+    document.getElementById("loadingMessage").textContent = message;
+    document.getElementById("loadingOverlay").style.display = "flex";
+  }
+  function hideLoading() {
+    document.getElementById("loadingOverlay").style.display = "none";
+  }
 
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -143,10 +154,14 @@
     const subject = document.getElementById("su-subject").value.trim();
     const email = document.getElementById("su-email").value.trim();
     const pass = document.getElementById("su-pass").value;
-    if (!name || !email || !pass)
-      return showToast("⚠️ Please fill in all required fields");
-    if (pass.length < 8)
-      return showToast("⚠️ Password must be at least 8 characters");
+    if (!name || !email || !pass) {
+      showToast("⚠️ Please fill in all required fields", "error");
+      return;
+    }
+    if (pass.length < 8) {
+      showToast("⚠️ Password must be at least 8 characters", "error");
+      return;
+    }
     const user = {
       name,
       org: org || "My School",
@@ -161,13 +176,19 @@
     updateDashboardUser();
     renderClasses();
     renderTable();
-    showToast("🎉 Welcome to GradeFlow, " + name.split(" ")[0] + "!");
+    showToast(
+      "🎉 Welcome to GradeFlow, " + name.split(" ")[0] + "!",
+      "success",
+    );
   };
 
   window.handleLogin = function () {
     const email = document.getElementById("li-email").value.trim();
     const pass = document.getElementById("li-pass").value;
-    if (!email || !pass) return showToast("⚠️ Enter your email and password");
+    if (!email || !pass) {
+      showToast("⚠️ Enter your email and password", "error");
+      return;
+    }
     let user = currentUser || {
       name: "Mrs. Adaeze Okonkwo",
       org: "Greenfield Academy",
@@ -182,14 +203,14 @@
     updateDashboardUser();
     renderClasses();
     renderTable();
-    showToast("✅ Welcome back!");
+    showToast("✅ Welcome back!", "success");
   };
 
   window.handleLogout = function () {
     localStorage.removeItem("gf_user");
     currentUser = null;
     showPage("landing");
-    showToast("👋 Logged out successfully");
+    showToast("👋 Logged out successfully", "info");
   };
 
   function updateDashboardUser() {
@@ -248,36 +269,71 @@
     }
   }
 
-  // ----- RENDER CLASSES -----
+  // ----- RENDER CLASSES (with delete button) -----
   function renderClasses() {
     const grid = document.getElementById("classesGrid");
-    grid.innerHTML =
-      classes
-        .map((c) => {
-          const sts = allStudents[c.id] || [];
-          const ranked = rankStudents(sts);
-          const graded = ranked.filter((s) => s.total !== null);
-          const avg = graded.length
-            ? Math.round(
-                graded.reduce((a, s) => a + s.total, 0) / graded.length,
-              )
-            : "—";
-          const isActive = c.id === activeClassId;
-          return `<div class="class-card${isActive ? " active-class" : ""}" onclick="selectClass('${c.id}')">
-            <div class="class-card-icon">${c.emoji}</div>
-            <div class="class-card-name">${c.name}</div>
-            <div class="class-card-meta">${c.subject}</div>
-            <div class="class-card-stats">
-              <div class="cs"><strong>${sts.length}</strong>Students</div>
-              <div class="cs"><strong>${avg === "—" ? "—" : avg + "%"}</strong>Avg</div>
-              <div class="cs"><strong>${graded.length}</strong>Graded</div>
-            </div>
-          </div>`;
-        })
-        .join("") +
-      `<div class="add-class-card" onclick="openAddClassModal()"><div class="plus">＋</div><p>Add New Class</p></div>`;
+    if (classes.length === 0) {
+      grid.innerHTML = "";
+      document.getElementById("emptyClassesState").style.display = "block";
+      document.getElementById("scorePanel").style.display = "none";
+    } else {
+      document.getElementById("emptyClassesState").style.display = "none";
+      grid.innerHTML =
+        classes
+          .map((c) => {
+            const sts = allStudents[c.id] || [];
+            const ranked = rankStudents(sts);
+            const graded = ranked.filter((s) => s.total !== null);
+            const avg = graded.length
+              ? Math.round(
+                  graded.reduce((a, s) => a + s.total, 0) / graded.length,
+                )
+              : "—";
+            const isActive = c.id === activeClassId;
+            return `<div class="class-card${isActive ? " active-class" : ""}" onclick="selectClass('${c.id}')">
+              <span class="class-delete" onclick="deleteClass('${c.id}', event)">🗑️</span>
+              <div class="class-card-icon">${c.emoji}</div>
+              <div class="class-card-name">${c.name}</div>
+              <div class="class-card-meta">${c.subject}</div>
+              <div class="class-card-stats">
+                <div class="cs"><strong>${sts.length}</strong>Students</div>
+                <div class="cs"><strong>${avg === "—" ? "—" : avg + "%"}</strong>Avg</div>
+                <div class="cs"><strong>${graded.length}</strong>Graded</div>
+              </div>
+            </div>`;
+          })
+          .join("") +
+        `<div class="add-class-card" onclick="openAddClassModal()"><div class="plus">＋</div><p>Add New Class</p></div>`;
+    }
     updateTopStats();
   }
+
+  // ----- DELETE CLASS -----
+  window.deleteClass = function (classId, event) {
+    event.stopPropagation();
+    if (
+      !confirm(
+        "Are you sure you want to delete this class and all its students?",
+      )
+    )
+      return;
+
+    classes = classes.filter((c) => c.id !== classId);
+    delete allStudents[classId];
+
+    if (activeClassId === classId) {
+      activeClassId = classes.length > 0 ? classes[0].id : null;
+    }
+
+    saveData();
+    renderClasses();
+    if (activeClassId) {
+      renderTable();
+    } else {
+      document.getElementById("scorePanel").style.display = "none";
+    }
+    showToast("Class deleted", "success");
+  };
 
   // ----- RENDER TABLE -----
   function renderTable() {
@@ -347,7 +403,7 @@
     const num = parseFloat(v);
     if (v !== "" && (isNaN(num) || num < 0 || num > max)) {
       el.classList.add("error");
-      showToast(`⚠️ Max score for ${field} is ${max}`);
+      showToast(`⚠️ Max score for ${field} is ${max}`, "error");
       return;
     }
     el.classList.remove("error");
@@ -358,6 +414,7 @@
     updateSummary(ranked);
     updateTopStats();
     saveData();
+    showToast("Score updated", "success");
   };
 
   function updateSummary(ranked) {
@@ -404,19 +461,21 @@
     if (!currentUser) return;
     const name = document.getElementById("newName").value.trim();
     if (!name) {
-      showToast("⚠️ Enter a student name");
+      showToast("⚠️ Enter a student name", "error");
       return;
     }
     const classStudents = allStudents[activeClassId] || [];
     if (currentUser.plan === "free" && classStudents.length >= 30) {
       showToast(
         "⚠️ Free plan allows max 30 students per class. Upgrade to add more.",
+        "error",
       );
       return;
     }
     if (currentUser.plan === "standard" && classStudents.length >= 50) {
       showToast(
         "⚠️ Standard plan allows max 50 students per class. Upgrade to School Plan for unlimited.",
+        "error",
       );
       return;
     }
@@ -435,23 +494,24 @@
     renderTable();
     renderClasses();
     saveData();
-    showToast("✅ Student added!");
+    showToast("✅ Student added!", "success");
   };
 
   window.removeStudent = function (id) {
     if (!currentUser) return;
+    if (!confirm("Remove this student?")) return;
     allStudents[activeClassId] = (allStudents[activeClassId] || []).filter(
       (s) => s.id !== id,
     );
     renderTable();
     renderClasses();
     saveData();
-    showToast("🗑 Student removed");
+    showToast("🗑 Student removed", "success");
   };
 
   window.addStudentRow = function () {
     document.getElementById("newName").focus();
-    showToast("👇 Fill in the row at the bottom of the table");
+    showToast("👇 Fill in the row at the bottom of the table", "info");
   };
 
   window.filterStudents = function (q) {
@@ -468,7 +528,10 @@
     const ranked = rankStudents(allStudents[activeClassId] || []);
     sortAsc = !sortAsc;
     renderRows(sortAsc ? [...ranked].reverse() : ranked);
-    showToast(sortAsc ? "⬆ Sorted: Lowest first" : "⬇ Sorted: Highest first");
+    showToast(
+      sortAsc ? "⬆ Sorted: Lowest first" : "⬇ Sorted: Highest first",
+      "info",
+    );
   };
 
   // ----- CLASS CRUD -----
@@ -485,6 +548,7 @@
     if (!canAddClass()) {
       showToast(
         "⚠️ You have reached your class limit. Upgrade to add more classes.",
+        "error",
       );
       return;
     }
@@ -502,7 +566,7 @@
     const subject =
       document.getElementById("newClassSubject").value.trim() || "General";
     if (!name) {
-      showToast("⚠️ Enter a class name");
+      showToast("⚠️ Enter a class name", "error");
       return;
     }
     const id = "cls" + Date.now();
@@ -520,118 +584,174 @@
     renderClasses();
     renderTable();
     saveData();
-    showToast("🎉 Class created!");
+    showToast("🎉 Class created!", "success");
   };
 
-  // ----- EXCEL UPLOAD -----
+  // ----- EXCEL UPLOAD (enhanced) -----
   document
     .getElementById("excelUpload")
     .addEventListener("change", async function (e) {
       if (!canUploadExcel()) {
-        showToast("⚠️ Excel upload is a Standard feature. Please upgrade.");
+        showToast(
+          "⚠️ Excel upload is a Standard feature. Please upgrade.",
+          "error",
+        );
         this.value = "";
         return;
       }
       const file = e.target.files[0];
       if (!file) return;
-      const data = await file.arrayBuffer();
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      const headerRowIndex = rows.findIndex((row) =>
-        row.some((cell) => String(cell).toLowerCase().includes("name")),
-      );
-      if (headerRowIndex === -1) {
-        showToast('❌ Could not find "Name" column.');
-        this.value = "";
-        return;
-      }
+      showLoading("Reading Excel file...");
+      try {
+        const data = await file.arrayBuffer();
+        const workbook = XLSX.read(data, { type: "array" });
 
-      const headers = rows[headerRowIndex].map((h) => String(h).toLowerCase());
-      const nameIdx = headers.findIndex((h) => h.includes("name"));
-      const testIdx = headers.findIndex((h) => h.includes("test"));
-      const pracIdx = headers.findIndex(
-        (h) => h.includes("practical") || h.includes("prac"),
-      );
-      const examIdx = headers.findIndex((h) => h.includes("exam"));
+        // If multiple sheets, let user choose (simplified: take first)
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      if (nameIdx === -1) {
-        showToast('❌ Could not find "Name" column.');
-        this.value = "";
-        return;
-      }
+        // Find header row (look for common name columns)
+        const nameKeywords = ["name", "student", "full name", "student name"];
+        const testKeywords = ["test", "test score", "ca1", "continuous"];
+        const pracKeywords = ["practical", "prac", "lab", "project"];
+        const examKeywords = ["exam", "examination", "final"];
 
-      const students = [];
-      for (let i = headerRowIndex + 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row[nameIdx]) continue;
-        const name = String(row[nameIdx]).trim();
-        if (!name) continue;
-        students.push({
-          id: "s" + Date.now() + i,
-          name,
-          test: testIdx !== -1 ? parseFloat(row[testIdx]) || 0 : 0,
-          prac: pracIdx !== -1 ? parseFloat(row[pracIdx]) || 0 : 0,
-          exam:
-            examIdx !== -1
-              ? row[examIdx]
-                ? parseFloat(row[examIdx])
-                : ""
-              : "",
-        });
-      }
+        let headerRowIndex = -1;
+        for (let i = 0; i < Math.min(rows.length, 10); i++) {
+          const row = rows[i];
+          if (!row) continue;
+          const rowStr = row.map((c) => String(c).toLowerCase()).join(" ");
+          if (nameKeywords.some((kw) => rowStr.includes(kw))) {
+            headerRowIndex = i;
+            break;
+          }
+        }
 
-      if (students.length === 0) {
-        showToast("❌ No valid student data found.");
-        this.value = "";
-        return;
-      }
+        if (headerRowIndex === -1) {
+          hideLoading();
+          showToast(
+            "❌ Could not find a header row with student names.",
+            "error",
+          );
+          this.value = "";
+          return;
+        }
 
-      const classStudents = allStudents[activeClassId] || [];
-      const newCount = classStudents.length + students.length;
-      if (currentUser.plan === "free" && newCount > 30) {
-        showToast(
-          `⚠️ Free plan allows max 30 students. You have ${classStudents.length} and trying to add ${students.length}.`,
+        const headers = rows[headerRowIndex].map((h) =>
+          String(h).toLowerCase(),
         );
-        this.value = "";
-        return;
-      }
-      if (currentUser.plan === "standard" && newCount > 50) {
-        showToast(
-          `⚠️ Standard plan allows max 50 students per class. You have ${classStudents.length} and trying to add ${students.length}.`,
+        const nameIdx = headers.findIndex((h) =>
+          nameKeywords.some((kw) => h.includes(kw)),
         );
-        this.value = "";
-        return;
-      }
+        const testIdx = headers.findIndex((h) =>
+          testKeywords.some((kw) => h.includes(kw)),
+        );
+        const pracIdx = headers.findIndex((h) =>
+          pracKeywords.some((kw) => h.includes(kw)),
+        );
+        const examIdx = headers.findIndex((h) =>
+          examKeywords.some((kw) => h.includes(kw)),
+        );
 
-      if (!allStudents[activeClassId]) allStudents[activeClassId] = [];
-      allStudents[activeClassId].push(...students);
-      renderTable();
-      renderClasses();
-      saveData();
-      showToast(`✅ Imported ${students.length} students.`);
-      this.value = "";
+        if (nameIdx === -1) {
+          hideLoading();
+          showToast('❌ Could not find "Name" column.', "error");
+          this.value = "";
+          return;
+        }
+
+        const students = [];
+        for (let i = headerRowIndex + 1; i < rows.length; i++) {
+          const row = rows[i];
+          if (!row || !row[nameIdx]) continue;
+          const name = String(row[nameIdx]).trim();
+          if (!name) continue;
+          students.push({
+            id: "s" + Date.now() + i,
+            name,
+            test: testIdx !== -1 ? parseFloat(row[testIdx]) || 0 : 0,
+            prac: pracIdx !== -1 ? parseFloat(row[pracIdx]) || 0 : 0,
+            exam:
+              examIdx !== -1
+                ? row[examIdx]
+                  ? parseFloat(row[examIdx])
+                  : ""
+                : "",
+          });
+        }
+
+        if (students.length === 0) {
+          hideLoading();
+          showToast("❌ No valid student data found.", "error");
+          this.value = "";
+          return;
+        }
+
+        // Check plan limits
+        const classStudents = allStudents[activeClassId] || [];
+        const newCount = classStudents.length + students.length;
+        if (currentUser.plan === "free" && newCount > 30) {
+          hideLoading();
+          showToast(
+            `⚠️ Free plan allows max 30 students. You have ${classStudents.length} and trying to add ${students.length}.`,
+            "error",
+          );
+          this.value = "";
+          return;
+        }
+        if (currentUser.plan === "standard" && newCount > 50) {
+          hideLoading();
+          showToast(
+            `⚠️ Standard plan allows max 50 students per class. You have ${classStudents.length} and trying to add ${students.length}.`,
+            "error",
+          );
+          this.value = "";
+          return;
+        }
+
+        // Show preview (optional) – for now just import
+        if (!allStudents[activeClassId]) allStudents[activeClassId] = [];
+        allStudents[activeClassId].push(...students);
+        renderTable();
+        renderClasses();
+        saveData();
+        showToast(`✅ Imported ${students.length} students.`, "success");
+      } catch (err) {
+        showToast("❌ Error reading file: " + err.message, "error");
+      } finally {
+        hideLoading();
+        this.value = "";
+      }
     });
 
   // ----- PDF EXPORT -----
   window.exportAllPDFs = async function () {
     if (!canExportPDF()) {
-      showToast("⚠️ PDF export is a Standard feature. Please upgrade.");
+      showToast(
+        "⚠️ PDF export is a Standard feature. Please upgrade.",
+        "error",
+      );
       return;
     }
     const cls = classes.find((c) => c.id === activeClassId);
     if (!cls) return;
     const students = allStudents[activeClassId] || [];
     if (students.length === 0) {
-      showToast("No students to export.");
+      showToast("No students to export.", "info");
       return;
     }
     const ranked = rankStudents(students);
-    showToast("📄 Generating PDFs...");
-    for (const s of ranked) await exportStudentPDF(s, cls);
-    showToast("✅ PDFs generated!");
+    showLoading(`Generating PDFs for ${ranked.length} students...`);
+    try {
+      for (const s of ranked) await exportStudentPDF(s, cls);
+      showToast("✅ PDFs generated!", "success");
+    } catch (err) {
+      showToast("❌ PDF generation failed: " + err.message, "error");
+    } finally {
+      hideLoading();
+    }
   };
 
   async function exportStudentPDF(student, cls) {
@@ -676,7 +796,7 @@
     updateDashboardUser();
     renderClasses();
     renderTable();
-    showToast(`🎉 You are now on the ${plan} plan!`);
+    showToast(`🎉 You are now on the ${plan} plan!`, "success");
   };
 
   // ----- OFFLINE SUPPORT -----
@@ -700,7 +820,7 @@
   window.saveData = function () {
     localStorage.setItem("gf_classes", JSON.stringify(classes));
     localStorage.setItem("gf_students", JSON.stringify(allStudents));
-    showToast("💾 All data saved!");
+    showToast("💾 All data saved!", "success");
   };
 
   // ----- INIT -----

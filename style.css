@@ -1466,6 +1466,20 @@ footer {
   margin-bottom: 8px;
 }
 
+.class-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  opacity: 0.4;
+  font-size: 16px;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+.class-delete:hover {
+  opacity: 1;
+}
+
 .panel {
   background: #fff;
   border-radius: 16px;
@@ -1791,4 +1805,134 @@ table.score-table td {
 /* PDF template hidden */
 #pdf-template {
   display: none;
+}
+
+/* ========== ADDITIONS FOR PHASE 2 ========== */
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+.empty-state-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.empty-state-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+#loadingMessage {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Delete icon on class cards */
+.class-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
+  opacity: 0.4;
+  font-size: 16px;
+  transition: opacity 0.2s;
+  z-index: 5;
+}
+.class-delete:hover {
+  opacity: 1;
+}
+
+/* Ensure class card has relative positioning */
+.class-card {
+  position: relative;
+}
+
+/* Toast improvements */
+.toast {
+  background: #1f2937;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+.toast.success {
+  background: var(--emerald);
+}
+.toast.error {
+  background: var(--red);
+}
+.toast.warning {
+  background: var(--amber);
+}
+
+/* Better focus states */
+button:focus,
+input:focus,
+.class-card:focus {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .panel-header {
+    flex-direction: column;
+    align-items: start;
+  }
+  .panel-actions {
+    width: 100%;
+  }
+  .search-box {
+    width: 100%;
+  }
+  .search-box input {
+    width: 100%;
+  }
 }

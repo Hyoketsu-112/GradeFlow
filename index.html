@@ -14,6 +14,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <!-- Favicon (optional) -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'%3E%3Cpath d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'/%3E%3C/svg%3E"
+    />
   </head>
   <body>
     <!-- ========== LANDING PAGE ========== -->
@@ -560,7 +566,8 @@
               />
             </div>
             <div class="form-group">
-              <label>Date of Birth</label><input type="date" id="su-dob" />
+              <label>Date of Birth</label
+              ><input type="date" id="su-dob" title="Date of Birth" />
             </div>
           </div>
           <div class="form-group">
@@ -714,7 +721,9 @@
           </div>
           <div class="topbar-right">
             <span class="term-badge">📅 Second Term</span>
-            <div class="notif">🔔</div>
+            <div class="notif" onclick="showToast('🔔 No new notifications')">
+              🔔
+            </div>
             <div class="user-avatar" id="db-avatar2">A</div>
           </div>
         </div>
@@ -777,6 +786,38 @@
             </div>
           </div>
           <div class="classes-grid" id="classesGrid"></div>
+
+          <!-- empty state for classes (shown when no classes) -->
+          <div class="empty-state" id="emptyClassesState" style="display: none">
+            <div class="empty-state-icon">📂</div>
+            <div class="empty-state-title">No classes yet</div>
+            <div class="empty-state-desc">
+              Upload an Excel sheet or create a class manually to get started.
+            </div>
+            <button
+              class="btn btn-primary"
+              onclick="document.getElementById('excelUpload').click()"
+            >
+              Upload Excel
+            </button>
+            <button
+              class="btn btn-outline"
+              style="margin-left: 10px"
+              onclick="openAddClassModal()"
+            >
+              Create Class
+            </button>
+          </div>
+
+          <!-- loading overlay for async operations -->
+          <div
+            class="loading-overlay"
+            id="loadingOverlay"
+            style="display: none"
+          >
+            <div class="spinner"></div>
+            <p id="loadingMessage">Processing...</p>
+          </div>
 
           <!-- score panel -->
           <div id="scorePanel" style="display: none">
