@@ -14,7 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css" />
-    <!-- Favicon (optional) -->
+    <!-- Favicon -->
     <link
       rel="icon"
       type="image/svg+xml"
@@ -314,7 +314,7 @@
         </div>
       </section>
 
-      <!-- pricing -->
+      <!-- ========== UPDATED PRICING ========== -->
       <section class="pricing-section" id="pricing">
         <div style="text-align: center">
           <div class="section-tag">Pricing</div>
@@ -324,6 +324,7 @@
           </p>
         </div>
         <div class="pricing-grid">
+          <!-- Free Forever (Excel upload now included) -->
           <div class="price-card">
             <div class="plan-name">Free Forever</div>
             <div class="plan-price">₦0<span>/term</span></div>
@@ -335,10 +336,8 @@
               <li><span class="check">✓</span> Manual score entry</li>
               <li><span class="check">✓</span> Auto grade computation</li>
               <li><span class="check">✓</span> CSV download</li>
-              <li>
-                <span class="cross">✗</span
-                ><span style="color: var(--muted)">Excel upload</span>
-              </li>
+              <li><span class="check">✓</span> Excel & CSV upload</li>
+              <!-- changed to check -->
               <li>
                 <span class="cross">✗</span
                 ><span style="color: var(--muted)">PDF report cards</span>
@@ -352,6 +351,7 @@
               Start Free
             </button>
           </div>
+          <!-- Standard -->
           <div class="price-card popular">
             <div class="popular-badge">⭐ Most Popular</div>
             <div class="plan-name">Standard</div>
@@ -374,6 +374,7 @@
               Get Standard — ₦10,000
             </button>
           </div>
+          <!-- School Plan -->
           <div class="price-card">
             <div class="plan-name">School Plan</div>
             <div class="plan-price">₦30,000<span>/term</span></div>
@@ -566,8 +567,7 @@
               />
             </div>
             <div class="form-group">
-              <label>Date of Birth</label
-              ><input type="date" id="su-dob" title="Date of Birth" />
+              <label>Date of Birth</label><input type="date" id="su-dob" />
             </div>
           </div>
           <div class="form-group">
@@ -689,10 +689,11 @@
           </div>
         </nav>
         <div class="sidebar-bottom">
+          <!-- UPDATED upgrade card text (will be overwritten by JS) -->
           <div class="upgrade-card" id="upgrade-card">
             <p>
-              Upgrade to <strong style="color: #fcd34d">Standard</strong> for
-              Excel uploads & PDF exports.
+              Excel upload is <strong style="color: #fcd34d">free</strong>!
+              Upgrade to Standard for PDF exports & more classes.
             </p>
             <button
               class="upgrade-btn-side"
@@ -809,7 +810,7 @@
             </button>
           </div>
 
-          <!-- loading overlay for async operations -->
+          <!-- loading overlay -->
           <div
             class="loading-overlay"
             id="loadingOverlay"
@@ -1016,6 +1017,7 @@
         font-family: Inter, sans-serif;
         background: white;
         border: 1px solid #ddd;
+        display: none;
       "
     >
       <div

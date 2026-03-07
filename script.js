@@ -56,12 +56,12 @@
     if (currentUser.plan === "standard") return classes.length < 3;
     return classes.length < 1;
   }
+
+  // UPDATED: Excel upload is free for everyone
   function canUploadExcel() {
-    return (
-      currentUser &&
-      (currentUser.plan === "standard" || currentUser.plan === "school")
-    );
+    return true; // always allowed
   }
+
   function canExportPDF() {
     return (
       currentUser &&
@@ -74,7 +74,7 @@
     document.getElementById("page-dashboard").classList.toggle("collapsed");
   };
 
-  // ----- GRADING ENGINE -----
+  // ----- GRADING ENGINE (unchanged) -----
   function compute(student) {
     const t = Math.min(parseFloat(student.test) || 0, 20);
     const p = Math.min(parseFloat(student.prac) || 0, 20);
@@ -122,7 +122,7 @@
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   }
 
-  // ----- AUTH -----
+  // ----- AUTH (unchanged) -----
   window.openAuthModal = function () {
     document.getElementById("authModal").classList.add("active");
     document.body.style.overflow = "hidden";
@@ -213,6 +213,7 @@
     showToast("👋 Logged out successfully", "info");
   };
 
+  // UPDATED: upgrade card text now reflects free Excel upload
   function updateDashboardUser() {
     if (!currentUser) return;
     const initials = currentUser.name
@@ -242,10 +243,12 @@
         : currentUser.plan === "standard"
           ? "⭐ Standard Plan"
           : "🏫 School Plan";
+
+    // Update upgrade card dynamically based on plan
     const upgradeCard = document.getElementById("upgrade-card");
     if (currentUser.plan === "free") {
       upgradeCard.innerHTML =
-        '<p>Upgrade to <strong style="color:#fcd34d">Standard</strong> for Excel uploads & PDF exports.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'standard\')">Upgrade — ₦10,000</button>';
+        '<p>Excel upload is <strong style="color:#fcd34d">free</strong>! Upgrade to Standard for PDF exports & more classes.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'standard\')">Upgrade — ₦10,000</button>';
     } else if (currentUser.plan === "standard") {
       upgradeCard.innerHTML =
         '<p>Upgrade to <strong style="color:#fcd34d">School Plan</strong> for unlimited classes & multi-teacher access.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'school\')">Upgrade — ₦30,000</button>';
@@ -253,7 +256,9 @@
       upgradeCard.innerHTML =
         "<p>You're on the School Plan. Enjoy all features!</p>";
     }
-    document.getElementById("uploadExcelBtn").disabled = !canUploadExcel();
+
+    // Upload button is always enabled (Excel free)
+    document.getElementById("uploadExcelBtn").disabled = false;
     document.getElementById("exportPdfBtn").disabled = !canExportPDF();
   }
 
@@ -335,7 +340,7 @@
     showToast("Class deleted", "success");
   };
 
-  // ----- RENDER TABLE -----
+  // ----- RENDER TABLE (unchanged) -----
   function renderTable() {
     const cls = classes.find((c) => c.id === activeClassId);
     if (!cls) {
@@ -456,7 +461,7 @@
       : "—";
   }
 
-  // ----- STUDENT CRUD -----
+  // ----- STUDENT CRUD (unchanged) -----
   window.confirmAddStudent = function () {
     if (!currentUser) return;
     const name = document.getElementById("newName").value.trim();
@@ -534,7 +539,7 @@
     );
   };
 
-  // ----- CLASS CRUD -----
+  // ----- CLASS CRUD (unchanged) -----
   window.selectClass = function (id) {
     activeClassId = id;
     renderClasses();
@@ -587,18 +592,11 @@
     showToast("🎉 Class created!", "success");
   };
 
-  // ----- EXCEL UPLOAD (enhanced) -----
+  // ----- EXCEL UPLOAD (removed plan check) -----
   document
     .getElementById("excelUpload")
     .addEventListener("change", async function (e) {
-      if (!canUploadExcel()) {
-        showToast(
-          "⚠️ Excel upload is a Standard feature. Please upgrade.",
-          "error",
-        );
-        this.value = "";
-        return;
-      }
+      // No plan check – upload is free
       const file = e.target.files[0];
       if (!file) return;
 
@@ -607,12 +605,10 @@
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data, { type: "array" });
 
-        // If multiple sheets, let user choose (simplified: take first)
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-        // Find header row (look for common name columns)
         const nameKeywords = ["name", "student", "full name", "student name"];
         const testKeywords = ["test", "test score", "ca1", "continuous"];
         const pracKeywords = ["practical", "prac", "lab", "project"];
@@ -689,10 +685,10 @@
           return;
         }
 
-        // Check plan limits
+        // Check plan limits for student count (still applies)
         const classStudents = allStudents[activeClassId] || [];
         const newCount = classStudents.length + students.length;
-        if (currentUser.plan === "free" && newCount > 30) {
+        if (currentUser?.plan === "free" && newCount > 30) {
           hideLoading();
           showToast(
             `⚠️ Free plan allows max 30 students. You have ${classStudents.length} and trying to add ${students.length}.`,
@@ -701,7 +697,7 @@
           this.value = "";
           return;
         }
-        if (currentUser.plan === "standard" && newCount > 50) {
+        if (currentUser?.plan === "standard" && newCount > 50) {
           hideLoading();
           showToast(
             `⚠️ Standard plan allows max 50 students per class. You have ${classStudents.length} and trying to add ${students.length}.`,
@@ -711,7 +707,6 @@
           return;
         }
 
-        // Show preview (optional) – for now just import
         if (!allStudents[activeClassId]) allStudents[activeClassId] = [];
         allStudents[activeClassId].push(...students);
         renderTable();
@@ -726,7 +721,7 @@
       }
     });
 
-  // ----- PDF EXPORT -----
+  // ----- PDF EXPORT (unchanged) -----
   window.exportAllPDFs = async function () {
     if (!canExportPDF()) {
       showToast(
@@ -788,7 +783,7 @@
     document.body.removeChild(container);
   }
 
-  // ----- SIMULATED PAYMENT -----
+  // ----- SIMULATED PAYMENT (unchanged) -----
   window.simulatePayment = function (plan) {
     if (!currentUser) return;
     currentUser.plan = plan;
@@ -799,7 +794,7 @@
     showToast(`🎉 You are now on the ${plan} plan!`, "success");
   };
 
-  // ----- OFFLINE SUPPORT -----
+  // ----- OFFLINE SUPPORT (unchanged) -----
   function updateOnlineStatus() {
     const banner = document.getElementById("offline-banner");
     banner.classList.toggle("show", !navigator.onLine);
@@ -816,7 +811,7 @@
     });
   }
 
-  // ----- SAVE DATA -----
+  // ----- SAVE DATA (unchanged) -----
   window.saveData = function () {
     localStorage.setItem("gf_classes", JSON.stringify(classes));
     localStorage.setItem("gf_students", JSON.stringify(allStudents));
