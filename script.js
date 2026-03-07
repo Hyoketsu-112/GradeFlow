@@ -50,16 +50,16 @@
   }
   window.scrollToTop = scrollToTop;
 
+  // ----- PLAN LIMITS (UPDATED) -----
   function canAddClass() {
     if (!currentUser) return false;
     if (currentUser.plan === "school") return true;
     if (currentUser.plan === "standard") return classes.length < 3;
-    return classes.length < 1;
+    return classes.length < 1; // free: max 1 class
   }
 
-  // UPDATED: Excel upload is free for everyone
   function canUploadExcel() {
-    return true; // always allowed
+    return true; // always free
   }
 
   function canExportPDF() {
@@ -69,12 +69,24 @@
     );
   }
 
+  // New: check if adding more students would exceed plan limit
+  function canAddStudents(currentCount, newCount) {
+    if (!currentUser) return false;
+    if (currentUser.plan === "school") return true; // unlimited
+    if (currentUser.plan === "standard") {
+      // Standard: allow up to 200 students per class
+      return currentCount + newCount <= 200;
+    }
+    // Free: allow up to 50 students per class
+    return currentCount + newCount <= 50;
+  }
+
   // ----- HAMBURGER TOGGLE -----
   window.toggleSidebar = function () {
     document.getElementById("page-dashboard").classList.toggle("collapsed");
   };
 
-  // ----- GRADING ENGINE (unchanged) -----
+  // ----- GRADING ENGINE -----
   function compute(student) {
     const t = Math.min(parseFloat(student.test) || 0, 20);
     const p = Math.min(parseFloat(student.prac) || 0, 20);
@@ -122,7 +134,7 @@
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   }
 
-  // ----- AUTH (unchanged) -----
+  // ----- AUTH -----
   window.openAuthModal = function () {
     document.getElementById("authModal").classList.add("active");
     document.body.style.overflow = "hidden";
@@ -213,7 +225,6 @@
     showToast("👋 Logged out successfully", "info");
   };
 
-  // UPDATED: upgrade card text now reflects free Excel upload
   function updateDashboardUser() {
     if (!currentUser) return;
     const initials = currentUser.name
@@ -239,25 +250,23 @@
     const planBadge = document.getElementById("plan-badge");
     planBadge.textContent =
       currentUser.plan === "free"
-        ? "🆓 Free Plan"
+        ? "🆓 Free Plan (max 50 students)"
         : currentUser.plan === "standard"
-          ? "⭐ Standard Plan"
-          : "🏫 School Plan";
+          ? "⭐ Standard Plan (max 200 students)"
+          : "🏫 School Plan (unlimited)";
 
-    // Update upgrade card dynamically based on plan
     const upgradeCard = document.getElementById("upgrade-card");
     if (currentUser.plan === "free") {
       upgradeCard.innerHTML =
-        '<p>Excel upload is <strong style="color:#fcd34d">free</strong>! Upgrade to Standard for PDF exports & more classes.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'standard\')">Upgrade — ₦10,000</button>';
+        '<p>Excel upload is <strong style="color:#fcd34d">free</strong>! Upgrade to Standard for up to 200 students & PDF exports.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'standard\')">Upgrade — ₦10,000</button>';
     } else if (currentUser.plan === "standard") {
       upgradeCard.innerHTML =
-        '<p>Upgrade to <strong style="color:#fcd34d">School Plan</strong> for unlimited classes & multi-teacher access.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'school\')">Upgrade — ₦30,000</button>';
+        '<p>Upgrade to <strong style="color:#fcd34d">School Plan</strong> for unlimited students & multi-teacher access.</p><button class="upgrade-btn-side" onclick="simulatePayment(\'school\')">Upgrade — ₦30,000</button>';
     } else {
       upgradeCard.innerHTML =
         "<p>You're on the School Plan. Enjoy all features!</p>";
     }
 
-    // Upload button is always enabled (Excel free)
     document.getElementById("uploadExcelBtn").disabled = false;
     document.getElementById("exportPdfBtn").disabled = !canExportPDF();
   }
@@ -340,7 +349,7 @@
     showToast("Class deleted", "success");
   };
 
-  // ----- RENDER TABLE (unchanged) -----
+  // ----- RENDER TABLE -----
   function renderTable() {
     const cls = classes.find((c) => c.id === activeClassId);
     if (!cls) {
@@ -461,7 +470,7 @@
       : "—";
   }
 
-  // ----- STUDENT CRUD (unchanged) -----
+  // ----- STUDENT CRUD -----
   window.confirmAddStudent = function () {
     if (!currentUser) return;
     const name = document.getElementById("newName").value.trim();
@@ -470,16 +479,10 @@
       return;
     }
     const classStudents = allStudents[activeClassId] || [];
-    if (currentUser.plan === "free" && classStudents.length >= 30) {
+    if (!canAddStudents(classStudents.length, 1)) {
+      let limit = currentUser.plan === "free" ? 50 : 200;
       showToast(
-        "⚠️ Free plan allows max 30 students per class. Upgrade to add more.",
-        "error",
-      );
-      return;
-    }
-    if (currentUser.plan === "standard" && classStudents.length >= 50) {
-      showToast(
-        "⚠️ Standard plan allows max 50 students per class. Upgrade to School Plan for unlimited.",
+        `⚠️ Your plan allows max ${limit} students per class. Upgrade to add more.`,
         "error",
       );
       return;
@@ -539,7 +542,7 @@
     );
   };
 
-  // ----- CLASS CRUD (unchanged) -----
+  // ----- CLASS CRUD -----
   window.selectClass = function (id) {
     activeClassId = id;
     renderClasses();
@@ -592,11 +595,10 @@
     showToast("🎉 Class created!", "success");
   };
 
-  // ----- EXCEL UPLOAD (removed plan check) -----
+  // ----- EXCEL UPLOAD (fixed: handles no classes, ensures active class) -----
   document
     .getElementById("excelUpload")
     .addEventListener("change", async function (e) {
-      // No plan check – upload is free
       const file = e.target.files[0];
       if (!file) return;
 
@@ -685,30 +687,45 @@
           return;
         }
 
-        // Check plan limits for student count (still applies)
-        const classStudents = allStudents[activeClassId] || [];
-        const newCount = classStudents.length + students.length;
-        if (currentUser?.plan === "free" && newCount > 30) {
-          hideLoading();
+        // Ensure there is a valid active class
+        if (classes.length === 0) {
+          const newClassId = "cls" + Date.now();
+          classes.push({
+            id: newClassId,
+            name: "Imported Class",
+            subject: "General",
+            emoji: emojis[0],
+          });
+          allStudents[newClassId] = [];
+          activeClassId = newClassId;
           showToast(
-            `⚠️ Free plan allows max 30 students. You have ${classStudents.length} and trying to add ${students.length}.`,
-            "error",
+            "Created new class 'Imported Class' for your students.",
+            "info",
           );
-          this.value = "";
-          return;
+        } else if (
+          !activeClassId ||
+          !classes.find((c) => c.id === activeClassId)
+        ) {
+          activeClassId = classes[0].id;
         }
-        if (currentUser?.plan === "standard" && newCount > 50) {
+
+        // Check plan limits
+        const classStudents = allStudents[activeClassId] || [];
+        if (!canAddStudents(classStudents.length, students.length)) {
+          let limit = currentUser?.plan === "free" ? 50 : 200;
           hideLoading();
           showToast(
-            `⚠️ Standard plan allows max 50 students per class. You have ${classStudents.length} and trying to add ${students.length}.`,
+            `⚠️ Your plan allows max ${limit} students per class. You have ${classStudents.length} and trying to add ${students.length}.`,
             "error",
           );
           this.value = "";
           return;
         }
 
+        // Add students
         if (!allStudents[activeClassId]) allStudents[activeClassId] = [];
         allStudents[activeClassId].push(...students);
+
         renderTable();
         renderClasses();
         saveData();
@@ -721,7 +738,7 @@
       }
     });
 
-  // ----- PDF EXPORT (unchanged) -----
+  // ----- PDF EXPORT -----
   window.exportAllPDFs = async function () {
     if (!canExportPDF()) {
       showToast(
@@ -783,7 +800,7 @@
     document.body.removeChild(container);
   }
 
-  // ----- SIMULATED PAYMENT (unchanged) -----
+  // ----- SIMULATED PAYMENT -----
   window.simulatePayment = function (plan) {
     if (!currentUser) return;
     currentUser.plan = plan;
@@ -794,7 +811,45 @@
     showToast(`🎉 You are now on the ${plan} plan!`, "success");
   };
 
-  // ----- OFFLINE SUPPORT (unchanged) -----
+  // ----- RESET DATA (fix stuck count) -----
+  window.showResetConfirmation = function () {
+    if (
+      confirm(
+        "Are you sure you want to reset all data? This will delete all classes, students, and restore sample data.",
+      )
+    ) {
+      resetAllData();
+    }
+  };
+
+  function resetAllData() {
+    // Reset to initial sample data
+    classes = [
+      { id: "cls1", name: "JSS 2A", subject: "Mathematics", emoji: "📐" },
+      { id: "cls2", name: "SS 1B", subject: "Mathematics", emoji: "📏" },
+      { id: "cls3", name: "JSS 3C", subject: "Mathematics", emoji: "📊" },
+    ];
+    allStudents = {
+      cls1: [
+        { id: "s1", name: "Chidera Obi", test: 18, prac: 17, exam: 52 },
+        { id: "s2", name: "Amaka Nwosu", test: 16, prac: 15, exam: 47 },
+        { id: "s3", name: "Emeka Adeyemi", test: 14, prac: 12, exam: 38 },
+        { id: "s4", name: "Fatima Bello", test: 12, prac: 10, exam: "" },
+        { id: "s5", name: "Tunde Okafor", test: 8, prac: 9, exam: 18 },
+      ],
+      cls2: [],
+      cls3: [],
+    };
+    activeClassId = "cls1";
+    sortAsc = false;
+
+    saveData();
+    renderClasses();
+    renderTable();
+    showToast("All data has been reset to default.", "success");
+  }
+
+  // ----- OFFLINE SUPPORT -----
   function updateOnlineStatus() {
     const banner = document.getElementById("offline-banner");
     banner.classList.toggle("show", !navigator.onLine);
@@ -811,7 +866,7 @@
     });
   }
 
-  // ----- SAVE DATA (unchanged) -----
+  // ----- SAVE DATA -----
   window.saveData = function () {
     localStorage.setItem("gf_classes", JSON.stringify(classes));
     localStorage.setItem("gf_students", JSON.stringify(allStudents));
